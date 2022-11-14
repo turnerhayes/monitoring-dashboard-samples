@@ -20,7 +20,7 @@ alert_policy_templates:
     related_integrations:
       - id: postgresql
         platform: GCE
-  - id: "high-db-size"
+  - id: "max-writes"
     display_name: "Postgresql - Reached Max Written Buffers"
     description: "Alert fires when the background writer attains 3 maxwritten errors i.e. it cannot flush buffers because it has written too many. This is an indication that if an outage were to occur, then any bytes pending may be subject to be lost."
     version: 1
