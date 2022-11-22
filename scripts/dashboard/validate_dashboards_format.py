@@ -24,11 +24,11 @@ class JsonInMetadataMisMatchError(Exception):
 
 def validate_json(dashboards_data):
   try:
-   dashboards_dict = json.load(dashboards_data)
+    json.dumps(dashboards_data)
   except:
-    return {}
+    return False
 
-  return dashboards_dict
+  return True
 
 def map_paths(paths):
   '''Takes in list of paths and returns dictionary of metadata and dashboard json data, 
@@ -42,7 +42,7 @@ def map_paths(paths):
     if not 'dashboards' == path_parts[1] or len(path_parts) > 4:
       continue
 
-    if not path_parts[2] in map:
+    if not path_parts[2] in map.keys():
       map[path_parts[2]] = {
         'metadata': {
         },
@@ -59,9 +59,9 @@ def map_paths(paths):
 def get_sample_dashboards_json(path):
   '''Checks if file is in json format and returns data in dictionary form'''
   with open(path) as f:
-    dashboards_dict = validate_json(f)
+    dashboards_dict = json.load(f)
 
-    if not dashboards_dict:
+    if not validate_json(dashboards_dict):
       raise JsonFormattingError("{} content could not be loaded".format(path))
 
     return dashboards_dict
@@ -160,7 +160,7 @@ def main():
   path_map = map_paths(paths)
 
   # run checks for each directory
-  for directory in path_map:
+  for directory in path_map.keys():
     check_directory(directory, path_map)
 
 if __name__ == '__main__':
